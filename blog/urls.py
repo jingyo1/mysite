@@ -1,6 +1,9 @@
 from django.urls import path
-from . import views  # 현재 폴더의 views.py를 가져옵니다.
+from . import views
 
 urlpatterns = [
-    path("", views.post_list, name="post_list"),  # 메인 주소('')로 접속하면 post_list 뷰를 실행하라는 뜻입니다.
+    path('', views.post_list, name='post_list'),
+    path('post/<int:pk>/', views.post_detail, name='post_detail'),
+    path('post/new/', views.post_new, name='post_new'),
+    path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 ]
