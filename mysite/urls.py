@@ -1,7 +1,14 @@
+
 from django.contrib import admin
-from django.urls import path, include  # ✨ include를 꼭 추가하세요!
+from django.urls import path, include
+from django.conf import settings               # ✨ 추가
+from django.conf.urls.static import static     # ✨ 추가
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("blog.urls")),    # ✨ 메인 주소로 오면 blog 앱의 주소록을 보라는 설정입니다.
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
 ]
+
+# ✨ 정적 파일 및 미디어 파일의 URL 패턴을 프로젝트 주소에 더해줍니다.
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

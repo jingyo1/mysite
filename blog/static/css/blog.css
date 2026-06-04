@@ -38,3 +38,10 @@ h1, h2, h3, h4 {
 body {
     padding-left: 15px;
 }
+
+.intruder-image-list {
+    object-fit: cover;
+    max-width: 100%; /* 이미지가 화면 밖으로 넘치지 않게 방지 */
+    height: auto;
+    margin-top: 15px;
+}
