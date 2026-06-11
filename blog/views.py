@@ -52,22 +52,3 @@ def post_edit(request, pk):
 
 def js_test(request):
     return render(request, 'blog/js_test.html', {})
-
-
-# ==========================================
-# 🌟 [새로 추가] 안드로이드 연동용 REST API 창구
-# ==========================================
-
-# 1. 데이터를 JSON 규격으로 변환해주는 시리얼라이저 정의
-class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = '__all__' # 모델의 모든 필드(author, title, text 등)를 다룹니다.
-
-# 2. 안드로이드 앱이 접속하여 글을 쓰는 데이터 처리소(ViewSet)
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    
-    # 🔥 핵심: 앱에서 가짜 토큰을 보내더라도 보안 차단하지 않고 무조건 허용(AllowAny)합니다!
-    permission_classes = [AllowAny]
