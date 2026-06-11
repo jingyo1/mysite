@@ -1,7 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post
-from .forms import PostForm  # forms.py를 만들고 나면 에러가 사라집니다.
+from .forms import PostForm
+
+# 🌟 안드로이드 REST API 연동을 위한 패키지 임포트
+from rest_framework import viewsets, serializers
+from rest_framework.permissions import AllowAny
+
+# ==========================================
+# [기존 웹 기능] HTML 템플릿 뷰들 (그대로 유지)
+# ==========================================
 
 # 1. 메인 블로그 글 목록 보기
 def post_list(request):
@@ -26,11 +34,11 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
+
 # 4. 게시글 수정하기
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        # 수정을 담당하는 곳에도 똑같이 request.FILES를 추가
         form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
@@ -44,3 +52,22 @@ def post_edit(request, pk):
 
 def js_test(request):
     return render(request, 'blog/js_test.html', {})
+
+
+# ==========================================
+# 🌟 [새로 추가] 안드로이드 연동용 REST API 창구
+# ==========================================
+
+# 1. 데이터를 JSON 규격으로 변환해주는 시리얼라이저 정의
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__' # 모델의 모든 필드(author, title, text 등)를 다룹니다.
+
+# 2. 안드로이드 앱이 접속하여 글을 쓰는 데이터 처리소(ViewSet)
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    
+    # 🔥 핵심: 앱에서 가짜 토큰을 보내더라도 보안 차단하지 않고 무조건 허용(AllowAny)합니다!
+    permission_classes = [AllowAny]
