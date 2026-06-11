@@ -120,3 +120,5 @@ STATIC_ROOT = BASE_DIR / "static"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media/"
+
+ALLOWED_HOSTS = ['127.0.0.1', '10.0.2.2','10.0.2.16','.pythonanywhere.com']

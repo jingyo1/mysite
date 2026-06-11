@@ -44,3 +44,19 @@ def post_edit(request, pk):
 
 def js_test(request):
     return render(request, 'blog/js_test.html', {})
+
+
+from rest_framework import viewsets, serializers
+from rest_framework.permissions import AllowAny
+
+# 1. 데이터를 변환해주는 시리얼라이저
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+# 2. 안드로이드의 POST 요청을 받아줄 뷰셋
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [AllowAny] # 보안 패스
