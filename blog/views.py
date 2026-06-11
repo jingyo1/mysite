@@ -3,14 +3,6 @@ from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 
-# 🌟 안드로이드 REST API 연동을 위한 패키지 임포트
-from rest_framework import viewsets, serializers
-from rest_framework.permissions import AllowAny
-
-# ==========================================
-# [기존 웹 기능] HTML 템플릿 뷰들 (그대로 유지)
-# ==========================================
-
 # 1. 메인 블로그 글 목록 보기
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -32,7 +24,7 @@ def post_new(request):
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
-        form = PostForm()
+        form = Form()
     return render(request, 'blog/post_edit.html', {'form': form})
 
 # 4. 게시글 수정하기
