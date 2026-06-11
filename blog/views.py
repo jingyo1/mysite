@@ -16,8 +16,8 @@ def post_detail(request, pk):
 # 3. 새 게시글 작성하기
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid(): 
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
@@ -26,12 +26,12 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
-
 # 4. 게시글 수정하기
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        # 수정을 담당하는 곳에도 똑같이 request.FILES를 추가
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
